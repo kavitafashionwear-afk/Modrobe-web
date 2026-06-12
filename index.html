@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modrobe Impex — Ladies Fashion Wear Manufacturer · New Delhi</title>
+<meta name="description" content="Modrobe Impex — 20+ years manufacturing export-quality ladies fashion wear in bulk. Trendy designs, custom job work, minimum 100pc per design.">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1C1917;--gold:#B8860B;--cream:#FAF7F2;--line:#E7E0D5;--sub:#78716C;--g:#059669;--r:#DC2626;--wa:#25D366}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--cream)}
+.serif{font-family:'Playfair Display',serif}
+img{display:block}
+button{font-family:inherit;cursor:pointer}
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:50;background:rgba(250,247,242,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hwrap{max-width:1100px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{font-size:20px;font-weight:700;letter-spacing:.5px}
+.logo span{color:var(--gold)}
+.cartbtn{position:relative;background:var(--ink);color:#fff;border:none;padding:9px 18px;border-radius:30px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
+.cartn{background:var(--gold);color:#fff;font-size:11px;font-weight:700;min-width:19px;height:19px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+/* ── HERO ── */
+.hero{max-width:1100px;margin:0 auto;padding:54px 18px 40px;text-align:center}
+.hero .kick{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
+.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.12;margin-bottom:16px}
+.hero p{font-size:15px;color:var(--sub);max-width:620px;margin:0 auto 26px;line-height:1.7}
+.hero .cta{background:var(--gold);color:#fff;border:none;padding:13px 32px;border-radius:30px;font-size:14px;font-weight:700;letter-spacing:.3px}
+/* ── USP STRIP ── */
+.usps{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
+.uwrap{max-width:1100px;margin:0 auto;padding:22px 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.usp{display:flex;gap:11px;align-items:flex-start}
+.usp .ic{font-size:22px}
+.usp b{display:block;font-size:13.5px;margin-bottom:2px}
+.usp small{font-size:12px;color:var(--sub);line-height:1.5}
+/* ── SECTIONS ── */
+section{max-width:1100px;margin:0 auto;padding:46px 18px}
+.shead{text-align:center;margin-bottom:30px}
+.shead .kick{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700}
+.shead h2{font-size:clamp(24px,4vw,34px);margin-top:6px}
+.cats{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+.catb{background:#fff;border:1.5px solid var(--line);padding:7px 18px;border-radius:30px;font-size:13px;font-weight:600;color:var(--sub)}
+.catb.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* ── PRODUCT GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:transform .15s, box-shadow .15s}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(28,25,23,.09)}
+.pimg{width:100%;aspect-ratio:3/4;object-fit:cover;background:#F2EDE4}
+.pinfo{padding:13px 15px 15px}
+.pname{font-size:14.5px;font-weight:600;margin-bottom:3px}
+.pcat{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.prow{display:flex;justify-content:space-between;align-items:center}
+.price{font-size:17px;font-weight:700}
+.price small{font-size:11px;color:var(--sub);font-weight:500}
+.addb{background:var(--ink);color:#fff;border:none;padding:8px 16px;border-radius:24px;font-size:12.5px;font-weight:600}
+.addb.added{background:var(--g)}
+.moq{font-size:10.5px;color:var(--gold);font-weight:600;margin-top:7px}
+/* ── JOB WORK ── */
+.jw{background:var(--ink);color:#FAF7F2;border-radius:24px;padding:44px 28px;text-align:center}
+.jw h2{font-size:clamp(22px,4vw,32px);margin-bottom:12px}
+.jw p{font-size:14px;color:#D6CDC2;max-width:640px;margin:0 auto 22px;line-height:1.75}
+.jw .cta{background:var(--gold);color:#fff;border:none;padding:12px 30px;border-radius:30px;font-size:14px;font-weight:700}
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--line);background:#fff;margin-top:30px}
+.fwrap{max-width:1100px;margin:0 auto;padding:34px 18px;display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap}
+.fcol b{display:block;margin-bottom:8px;font-size:14px}
+.fcol div,.fcol a{font-size:13px;color:var(--sub);line-height:2;text-decoration:none;display:block}
+.fbot{text-align:center;font-size:11.5px;color:#A8A29E;padding:14px;border-top:1px solid var(--line)}
+.fbot a{color:#A8A29E;text-decoration:none}
+/* ── CART DRAWER ── */
+.drawer{position:fixed;inset:0;z-index:100;display:none}
+.drawer.open{display:block}
+.dback{position:absolute;inset:0;background:rgba(28,25,23,.45)}
+.dpanel{position:absolute;right:0;top:0;bottom:0;width:min(420px,94vw);background:#fff;display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(0,0,0,.18)}
+.dhead{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.dhead h3{font-size:17px}
+.dbody{flex:1;overflow-y:auto;padding:14px 20px}
+.citem{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.cimg{width:62px;height:80px;object-fit:cover;border-radius:9px;background:#F2EDE4}
+.cinfo{flex:1;min-width:0}
+.cname{font-size:13.5px;font-weight:600}
+.cpr{font-size:12px;color:var(--sub);margin:3px 0 7px}
+.qty{display:flex;align-items:center;gap:9px}
+.qty button{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-size:15px;font-weight:700}
+.qty span{font-size:13px;font-weight:700;min-width:42px;text-align:center}
+.crm{background:none;border:none;color:var(--r);font-size:11.5px;font-weight:600;padding:0;margin-top:6px}
+.dfoot{border-top:1px solid var(--line);padding:16px 20px}
+.trow{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
+.trow.big{font-size:17px;font-weight:700;margin:8px 0 14px}
+.dfoot input{width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:11px;font-size:14px;font-family:inherit;margin-bottom:9px}
+.wab{width:100%;background:var(--wa);color:#fff;border:none;padding:14px;border-radius:13px;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:9px}
+.note{font-size:11px;color:var(--sub);text-align:center;margin-top:9px;line-height:1.6}
+.empty{text-align:center;padding:50px 10px;color:var(--sub);font-size:14px}
+.empty .e{font-size:40px;margin-bottom:10px}
+/* ── ADMIN ── */
+.abar{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--ink);color:#fff;padding:11px 16px;display:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.abar.on{display:flex}
+.abar .btns{display:flex;gap:8px;flex-wrap:wrap}
+.ab{border:none;border-radius:9px;padding:9px 16px;font-size:12.5px;font-weight:700}
+.ab.gold{background:var(--gold);color:#fff}
+.ab.ghost{background:rgba(255,255,255,.14);color:#fff}
+.pcard .aedit{display:none;gap:6px;padding:0 15px 13px}
+body.adminmode .pcard .aedit{display:flex}
+.aeb{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:7px;font-size:12px;font-weight:600}
+.aeb.del{color:var(--r);border-color:#FECACA}
+/* ── MODAL ── */
+.ov{position:fixed;inset:0;background:rgba(28,25,23,.5);z-index:120;display:none;align-items:flex-end;justify-content:center}
+.ov.show{display:flex}
+@media(min-width:560px){.ov.show{align-items:center}}
+.mb{background:#fff;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:22px}
+@media(min-width:560px){.mb{border-radius:22px}}
+.mb h3{font-size:17px;margin-bottom:16px}
+.fl{margin-bottom:13px}
+.fl label{display:block;font-size:12px;font-weight:600;color:var(--sub);margin-bottom:5px}
+.fl input,.fl select{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;font-size:14px;font-family:inherit;background:#fff}
+.mft{display:flex;gap:10px;margin-top:18px}
+.mft button{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:700;border:none}
+.mft .sec2{background:#F5F0E8;color:var(--ink)}
+.mft .pri{background:var(--ink);color:#fff}
+.imgprev{width:110px;height:146px;object-fit:cover;border-radius:11px;border:1.5px solid var(--line);background:#F2EDE4;margin-top:8px}
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-90px);z-index:200;background:var(--ink);color:#fff;padding:11px 24px;border-radius:30px;font-size:13.5px;font-weight:600;transition:transform .3s;box-shadow:0 8px 26px rgba(0,0,0,.25)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <div class="logo serif">Modrobe <span>Impex</span></div>
+    <button class="cartbtn" onclick="openCart()">🛍 Cart <span class="cartn" id="cartn">0</span></button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="kick" id="h-kick">Est. 2006 · New Delhi</div>
+  <h1 class="serif" id="h-title">Export-Quality Ladies Fashion Wear, Manufactured in Bulk</h1>
+  <p id="h-sub">For over 20 years, Modrobe Impex has crafted trendy, export-level ladies garments for wholesalers and brands across India. Minimum 100 pieces per design (colours mixed) — delivered on your timeline, every time.</p>
+  <button class="cta" onclick="document.getElementById('catalogue').scrollIntoView({behavior:'smooth'})">Browse Catalogue ↓</button>
+</div>
+
+<div class="usps">
+  <div class="uwrap">
+    <div class="usp"><div class="ic">🏭</div><div><b>20+ Years of Manufacturing</b><small>Trusted ladies garment makers since 2006</small></div></div>
+    <div class="usp"><div class="ic">✈️</div><div><b>Export-Level Quality</b><small>Stitching & finishing to export standards</small></div></div>
+    <div class="usp"><div class="ic">📦</div><div><b>Bulk Orders Only</b><small>Min. 100 pcs per design, colours mixed</small></div></div>
+    <div class="usp"><div class="ic">⏱</div><div><b>On-Time Delivery</b><small>Your quantity, your timeline — committed</small></div></div>
+  </div>
+</div>
+
+<section id="catalogue">
+  <div class="shead">
+    <div class="kick">Our Collection</div>
+    <h2 class="serif">Latest Catalogue</h2>
+  </div>
+  <div class="cats" id="cats"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="gempty" style="display:none"><div class="e">🧵</div>Catalogue is being updated.<br>Please check back soon or contact us on WhatsApp.</div>
+</section>
+
+<section>
+  <div class="jw">
+    <div class="kick" style="color:var(--gold);font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:10px">Custom Manufacturing</div>
+    <h2 class="serif">Job Work for Your Own Designs</h2>
+    <p>Have your own design, fabric, or label? We manufacture customised ladies garments to your exact specification — sampling, cutting, stitching, finishing and packing under one roof. Bring your design; we'll bring it to life at export quality.</p>
+    <button class="cta" onclick="jwEnquiry()">💬 Enquire on WhatsApp</button>
+  </div>
+</section>
+
+<footer>
+  <div class="fwrap">
+    <div class="fcol" style="max-width:300px"><b class="serif" style="font-size:17px">Modrobe <span style="color:var(--gold)">Impex</span></b>
+      <div>Manufacturer & wholesaler of trendy ladies fashion wear. Export-quality garments in bulk since 2006.</div></div>
+    <div class="fcol"><b>Business</b>
+      <div>Bulk orders: min. 100 pcs / design</div><div>Colours mixed per design</div><div>Custom job work available</div></div>
+    <div class="fcol"><b>Contact</b>
+      <a href="#" id="f-wa">📲 WhatsApp Us</a>
+      <div>📍 Gandhi Nagar, New Delhi</div></div>
+  </div>
+  <div class="fbot">© Modrobe Impex · All designs are property of Modrobe Impex · <a href="#" onclick="ownerLogin();return false">Owner Login</a></div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="dback" onclick="closeCart()"></div>
+  <div class="dpanel">
+    <div class="dhead"><h3 class="serif">Your Order</h3><button onclick="closeCart()" style="background:none;border:none;font-size:20px">✕</button></div>
+    <div class="dbody" id="dbody"></div>
+    <div class="dfoot" id="dfoot"></div>
+  </div>
+</div>
+
+<!-- PRODUCT EDIT MODAL (admin) -->
+<div class="ov" id="mo-prod"><div class="mb">
+  <h3 class="serif" id="pm-title">Add Design</h3>
+  <div class="fl"><label>Design Name *</label><input id="pm-name" placeholder="e.g. D-101 Anarkali Kurti"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+    <div class="fl"><label>Price per Piece (₹) *</label><input id="pm-price" type="number" inputmode="decimal" placeholder="349"></div>
+    <div class="fl"><label>Min. Qty (pcs)</label><input id="pm-moq" type="number" inputmode="numeric" placeholder="100" value="100"></div>
+  </div>
+  <div class="fl"><label>Category</label><select id="pm-cat"><option>Kurtis</option><option>Tops</option><option>Dresses</option><option>Co-ord Sets</option><option>Gowns</option><option>Bottoms</option><option>Other</option></select></div>
+  <div class="fl"><label>Photo</label><input type="file" id="pm-img" accept="image/*" onchange="prevImg(this)"><img class="imgprev" id="pm-prev" src="" alt=""></div>
+  <div class="mft"><button class="sec2" onclick="closeM('prod')">Cancel</button><button class="pri" onclick="saveProd()">Save Design</button></div>
+</div></div>
+
+<!-- SETTINGS MODAL (admin) -->
+<div class="ov" id="mo-set"><div class="mb">
+  <h3 class="serif">Website Settings</h3>
+  <div class="fl"><label>WhatsApp Number (with country code, no +) *</label><input id="sm-wa" placeholder="919871234567"></div>
+  <div class="fl"><label>Hero Heading</label><input id="sm-title"></div>
+  <div class="fl"><label>Hero Paragraph</label><input id="sm-sub"></div>
+  <div class="fl"><label>Top Kicker Line</label><input id="sm-kick"></div>
+  <div class="mft"><button class="sec2" onclick="closeM('set')">Cancel</button><button class="pri" onclick="saveSettings()">Save</button></div>
+</div></div>
+
+<!-- ADMIN BAR -->
+<div class="abar" id="abar">
+  <div style="font-size:13px;font-weight:700">✏️ Owner Mode — <span id="a-email" style="font-weight:400;color:#D6CDC2"></span></div>
+  <div class="btns">
+    <button class="ab gold" onclick="openAddProd()">＋ Add Design</button>
+    <button class="ab ghost" onclick="openSettings()">⚙ Settings</button>
+    <button class="ab ghost" onclick="ownerLogout()">Logout</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+firebase.initializeApp({apiKey:"AIzaSyDRfRBzqdg8LCUjZKdGRNIsKCBszbtM7ok",authDomain:"challan-manager-85768.firebaseapp.com",projectId:"challan-manager-85768",storageBucket:"challan-manager-85768.firebasestorage.app",messagingSenderId:"667915790046",appId:"1:667915790046:web:92b61ba86c9facd620444f"});
+var auth=firebase.auth(),db=firebase.firestore();
+
+// ── STATE ──
+var PRODUCTS=[],SET={wa:'',heroTitle:'',heroSub:'',kick:''},CART={},curCat='All',isOwner=false,editId=null,pendingImg='';
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmt(n){return '₹'+new Intl.NumberFormat('en-IN').format(Math.round(n||0));}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+
+// ── LOAD PUBLIC DATA ──
+function loadSite(){
+  db.collection('site').doc('settings').get().then(function(s){
+    if(s.exists){SET=Object.assign(SET,s.data());applySettings();}
+  }).catch(function(){});
+  db.collection('catalog').orderBy('sort','desc').get().then(function(qs){
+    PRODUCTS=[];qs.forEach(function(d){var p=d.data();p.id=d.id;if(p.active!==false)PRODUCTS.push(p);});
+    renderCats();renderGrid();
+  }).catch(function(e){
+    document.getElementById('gempty').style.display='block';
+  });
+}
+function applySettings(){
+  if(SET.heroTitle)document.getElementById('h-title').textContent=SET.heroTitle;
+  if(SET.heroSub)document.getElementById('h-sub').textContent=SET.heroSub;
+  if(SET.kick)document.getElementById('h-kick').textContent=SET.kick;
+  document.getElementById('f-wa').href=SET.wa?('https://wa.me/'+SET.wa):'#';
+}
+
+// ── CATALOGUE ──
+function renderCats(){
+  var cats=['All'];PRODUCTS.forEach(function(p){if(p.cat&&cats.indexOf(p.cat)<0)cats.push(p.cat);});
+  document.getElementById('cats').innerHTML=cats.map(function(c){
+    return '<button class="catb'+(curCat===c?' on':'')+'" onclick="curCat=\''+esc(c)+'\';renderCats();renderGrid()">'+esc(c)+'</button>';
+  }).join('');
+}
+function renderGrid(){
+  var vis=curCat==='All'?PRODUCTS:PRODUCTS.filter(function(p){return p.cat===curCat;});
+  var g=document.getElementById('grid');
+  document.getElementById('gempty').style.display=vis.length?'none':'block';
+  g.innerHTML=vis.map(function(p){
+    var inCart=CART[p.id];
+    return '<div class="pcard">'+
+      '<img class="pimg" src="'+(p.img||'')+'" alt="'+esc(p.name)+'" loading="lazy">'+
+      '<div class="pinfo">'+
+        '<div class="pname">'+esc(p.name)+'</div>'+
+        '<div class="pcat">'+esc(p.cat||'')+'</div>'+
+        '<div class="prow"><div class="price">'+fmt(p.price)+' <small>/pc</small></div>'+
+        '<button class="addb'+(inCart?' added':'')+'" onclick="addCart(\''+p.id+'\')">'+(inCart?'✓ Added':'Add to Cart')+'</button></div>'+
+        '<div class="moq">Min. '+(p.moq||100)+' pcs · colours mixed</div>'+
+      '</div>'+
+      '<div class="aedit">'+
+        '<button class="aeb" onclick="openEditProd(\''+p.id+'\')">✏️ Edit</button>'+
+        '<button class="aeb del" onclick="delProd(\''+p.id+'\')">🗑 Delete</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+// ── CART ──
+function addCart(pid){
+  var p=PRODUCTS.find(function(x){return x.id===pid;});if(!p)return;
+  if(!CART[pid])CART[pid]={qty:p.moq||100};
+  updateCartN();renderGrid();toast('Added to order 🛍');
+}
+function updateCartN(){document.getElementById('cartn').textContent=Object.keys(CART).length;}
+function openCart(){document.getElementById('drawer').classList.add('open');renderCart();}
+function closeCart(){document.getElementById('drawer').classList.remove('open');}
+function chQty(pid,d){
+  var p=PRODUCTS.find(function(x){return x.id===pid;});if(!p||!CART[pid])return;
+  var moq=p.moq||100;
+  CART[pid].qty=Math.max(moq,CART[pid].qty+d);
+  renderCart();
+}
+function rmCart(pid){delete CART[pid];updateCartN();renderCart();renderGrid();}
+function renderCart(){
+  var body=document.getElementById('dbody'),foot=document.getElementById('dfoot');
+  var ids=Object.keys(CART);
+  if(!ids.length){
+    body.innerHTML='<div class="empty"><div class="e">🛍</div>Your order is empty.<br>Add designs from the catalogue.</div>';
+    foot.innerHTML='';return;
+  }
+  var totQ=0,totV=0;
+  body.innerHTML=ids.map(function(pid){
+    var p=PRODUCTS.find(function(x){return x.id===pid;});if(!p)return'';
+    var q=CART[pid].qty;totQ+=q;totV+=q*p.price;
+    return '<div class="citem">'+
+      '<img class="cimg" src="'+(p.img||'')+'" alt="">'+
+      '<div class="cinfo"><div class="cname">'+esc(p.name)+'</div>'+
+      '<div class="cpr">'+fmt(p.price)+' /pc · subtotal '+fmt(q*p.price)+'</div>'+
+      '<div class="qty"><button onclick="chQty(\''+pid+'\',-50)">−</button><span>'+q+' pcs</span><button onclick="chQty(\''+pid+'\',50)">＋</button></div>'+
+      '<button class="crm" onclick="rmCart(\''+pid+'\')">Remove</button></div></div>';
+  }).join('');
+  foot.innerHTML=
+    '<div class="trow"><span>Total pieces</span><b>'+totQ+' pcs</b></div>'+
+    '<div class="trow big"><span>Estimated value</span><span>'+fmt(totV)+'</span></div>'+
+    '<input id="c-name" placeholder="Your name / shop name *">'+
+    '<input id="c-city" placeholder="City *">'+
+    '<button class="wab" onclick="sendWA()">📲 Send Order on WhatsApp</button>'+
+    '<div class="note">Your order opens in WhatsApp — nothing is final until we confirm together. Prices ex-factory, GST extra.</div>';
+}
+function sendWA(){
+  if(!SET.wa){toast('WhatsApp number not set yet — please call us.');return;}
+  var name=(document.getElementById('c-name').value||'').trim();
+  var city=(document.getElementById('c-city').value||'').trim();
+  if(!name||!city){toast('Please fill your name and city');return;}
+  var lines=['🧵 *New Order — Modrobe Impex Website*','From: *'+name+'* ('+city+')',''];
+  var totQ=0,totV=0,i=1;
+  Object.keys(CART).forEach(function(pid){
+    var p=PRODUCTS.find(function(x){return x.id===pid;});if(!p)return;
+    var q=CART[pid].qty;totQ+=q;totV+=q*p.price;
+    lines.push(i+') *'+p.name+'* — '+q+' pcs × ₹'+p.price+' = ₹'+(q*p.price).toLocaleString('en-IN'));
+    i++;
+  });
+  lines.push('','Total: *'+totQ+' pcs · ₹'+totV.toLocaleString('en-IN')+'*','(colours mixed per design)');
+  window.open('https://wa.me/'+SET.wa+'?text='+encodeURIComponent(lines.join('\n')),'_blank');
+}
+function jwEnquiry(){
+  if(!SET.wa){toast('WhatsApp number not set yet');return;}
+  var t='Hi Modrobe Impex! 👋\nI\'m interested in *custom job work* for my own designs. Please share details.';
+  window.open('https://wa.me/'+SET.wa+'?text='+encodeURIComponent(t),'_blank');
+}
+
+// ── OWNER MODE ──
+function ownerLogin(){
+  var p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
+  auth.signInWithPopup(p).then(function(r){if(r&&r.user)enableOwner(r.user);})
+  .catch(function(e){if(e.code==='auth/popup-blocked')auth.signInWithRedirect(p);else toast('Login failed: '+e.code);});
+}
+auth.getRedirectResult().then(function(r){if(r&&r.user)enableOwner(r.user);}).catch(function(){});
+auth.onAuthStateChanged(function(u){if(u)enableOwner(u);});
+function enableOwner(u){
+  isOwner=true;
+  document.body.classList.add('adminmode');
+  document.getElementById('abar').classList.add('on');
+  document.getElementById('a-email').textContent=u.email||'';
+  renderGrid();
+}
+function ownerLogout(){auth.signOut().then(function(){isOwner=false;document.body.classList.remove('adminmode');document.getElementById('abar').classList.remove('on');renderGrid();});}
+
+// ── ADMIN: PRODUCTS ──
+function openM(id){document.getElementById('mo-'+id).classList.add('show');}
+function closeM(id){document.getElementById('mo-'+id).classList.remove('show');}
+function openAddProd(){
+  editId=null;pendingImg='';
+  document.getElementById('pm-title').textContent='Add Design';
+  document.getElementById('pm-name').value='';
+  document.getElementById('pm-price').value='';
+  document.getElementById('pm-moq').value='100';
+  document.getElementById('pm-cat').value='Kurtis';
+  document.getElementById('pm-img').value='';
+  document.getElementById('pm-prev').src='';
+  openM('prod');
+}
+function openEditProd(pid){
+  var p=PRODUCTS.find(function(x){return x.id===pid;});if(!p)return;
+  editId=pid;pendingImg=p.img||'';
+  document.getElementById('pm-title').textContent='Edit Design';
+  document.getElementById('pm-name').value=p.name||'';
+  document.getElementById('pm-price').value=p.price||'';
+  document.getElementById('pm-moq').value=p.moq||100;
+  document.getElementById('pm-cat').value=p.cat||'Other';
+  document.getElementById('pm-img').value='';
+  document.getElementById('pm-prev').src=p.img||'';
+  openM('prod');
+}
+function prevImg(input){
+  var f=input.files[0];if(!f)return;
+  var img=new Image(),rd=new FileReader();
+  rd.onload=function(e){img.src=e.target.result;};
+  img.onload=function(){
+    var c=document.createElement('canvas');
+    var max=800,w=img.width,h=img.height;
+    if(w>h&&w>max){h=h*max/w;w=max;}else if(h>=w&&h>max){w=w*max/h;h=max;}
+    c.width=w;c.height=h;
+    c.getContext('2d').drawImage(img,0,0,w,h);
+    pendingImg=c.toDataURL('image/jpeg',0.72);
+    document.getElementById('pm-prev').src=pendingImg;
+    if(pendingImg.length>900000)toast('⚠ Photo very large — try a smaller image');
+  };
+  rd.readAsDataURL(f);
+}
+function saveProd(){
+  var name=document.getElementById('pm-name').value.trim();
+  var price=+document.getElementById('pm-price').value;
+  var moq=+document.getElementById('pm-moq').value||100;
+  var cat=document.getElementById('pm-cat').value;
+  if(!name||!price){toast('Enter design name and price');return;}
+  if(!pendingImg&&!editId){toast('Please add a photo');return;}
+  var data={name:name,price:price,moq:moq,cat:cat,img:pendingImg,active:true,sort:editId?(PRODUCTS.find(function(x){return x.id===editId;})||{}).sort||Date.now():Date.now()};
+  var op=editId?db.collection('catalog').doc(editId).set(data):db.collection('catalog').add(data);
+  op.then(function(){closeM('prod');toast(editId?'Design updated ✓':'Design added ✓');loadSite();})
+  .catch(function(e){toast('Save failed: '+e.code+' — check Firestore rules');});
+}
+function delProd(pid){
+  var p=PRODUCTS.find(function(x){return x.id===pid;});if(!p)return;
+  if(!confirm('Delete "'+p.name+'" from the catalogue?'))return;
+  db.collection('catalog').doc(pid).delete().then(function(){toast('Deleted');loadSite();})
+  .catch(function(e){toast('Delete failed: '+e.code);});
+}
+
+// ── ADMIN: SETTINGS ──
+function openSettings(){
+  document.getElementById('sm-wa').value=SET.wa||'';
+  document.getElementById('sm-title').value=SET.heroTitle||document.getElementById('h-title').textContent;
+  document.getElementById('sm-sub').value=SET.heroSub||document.getElementById('h-sub').textContent;
+  document.getElementById('sm-kick').value=SET.kick||document.getElementById('h-kick').textContent;
+  openM('set');
+}
+function saveSettings(){
+  var wa=document.getElementById('sm-wa').value.replace(/\D/g,'');
+  SET={wa:wa,heroTitle:document.getElementById('sm-title').value.trim(),heroSub:document.getElementById('sm-sub').value.trim(),kick:document.getElementById('sm-kick').value.trim()};
+  db.collection('site').doc('settings').set(SET).then(function(){applySettings();closeM('set');toast('Settings saved ✓');})
+  .catch(function(e){toast('Save failed: '+e.code+' — check Firestore rules');});
+}
+
+loadSite();
+</script>
+</body>
+</html>
